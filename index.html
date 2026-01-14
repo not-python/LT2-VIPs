@@ -65,7 +65,7 @@
             return years + " year" + (years > 1 ? "s" : "") + " ago"
         }
         
-        fetch("links.json")
+        fetch("links.json?t=" + new Date().getTime())
             .then(response => response.json())
             .then(link_data => {
             let container = document.getElementById("link_list")
