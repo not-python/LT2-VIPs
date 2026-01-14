@@ -75,10 +75,13 @@
             link_data.forEach(item => {
                 let div = document.createElement("div")
                 div.className = "link_item"
+                let code_match = item.url.match(/code=([a-f0-9]{32})|privateServerLinkCode=(\d+)/i)
+                let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
                 div.innerHTML = `
-                <a href="${item.url}" target="_blank">${item.url}</a>
+                <a href="${item.url}" target="_blank">Private Server ${display_code}</a>
                 <span class="time_text">Found ${get_time_ago(item.timestamp)}</span>
                 `
+
                 container.appendChild(div)
             })
             
