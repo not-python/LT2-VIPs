@@ -35,69 +35,100 @@
             margin-top: .3rem;
             display: block;
         }
+        .header_text {
+            margin-bottom: 1.5rem;
+            color: #ccc;
+            text-align: center;
+        }
+        .footer_text {
+            margin-top: 3rem;
+            font-size: .9rem;
+            color: #888;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
+    <div class="header_text" id="total_links">Total Links: 0 · Past Hour: 0</div>
     <div id="link_list"></div>
+
+    <div class="footer_text">
+        Created and maintained by @not_py ·
+        <a href="https://github.com/not-python/LT2-VIPs" target="_blank">View main page</a>
+    </div>
+
     <script>
         function get_time_ago(timestamp) {
             let seconds_now = Math.floor(Date.now() / 1000)
             let seconds_diff = seconds_now - timestamp
-            
+
             if (seconds_diff < 60) return 'just now'
             if (seconds_diff < 3600) {
-            let minutes = Math.floor(seconds_diff / 60)
-            return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago"
+                let minutes = Math.floor(seconds_diff / 60)
+                return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 86400) {
-            let hours = Math.floor(seconds_diff / 3600)
-            return hours + " hour" + (hours > 1 ? "s" : "") + " ago"
+                let hours = Math.floor(seconds_diff / 3600)
+                return hours + " hour" + (hours > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 2592000) {
-            let days = Math.floor(seconds_diff / 86400)
-            return days + " day" + (days > 1 ? "s" : "") + " ago"
+                let days = Math.floor(seconds_diff / 86400)
+                return days + " day" + (days > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 31536000) {
-            let months = Math.floor(seconds_diff / 2592000)
-            return months + " month" + (months > 1 ? "s" : "") + " ago"
+                let months = Math.floor(seconds_diff / 2592000)
+                return months + " month" + (months > 1 ? "s" : "") + " ago"
             }
             let years = Math.floor(seconds_diff / 31536000)
             return years + " year" + (years > 1 ? "s" : "") + " ago"
         }
-        
+
         fetch("links.json?t=" + new Date().getTime())
             .then(response => response.json())
             .then(link_data => {
-            let container = document.getElementById("link_list")
-            
-            link_data.sort((a, b) => b.timestamp - a.timestamp)
-            
-            link_data.forEach(item => {
-                let div = document.createElement("div")
-                div.className = "link_item"
-                let code_match = item.url.match(/code=([a-f0-9]{32})|privateServerLinkCode=(\d+)/i)
-                let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
-                div.innerHTML = `
-                <a href="${item.url}" target="_blank">Private Server ${display_code}</a>
-                <span class="time_text">Found ${get_time_ago(item.timestamp)}</span>
-                `
+                let container = document.getElementById("link_list")
+                let header = document.getElementById("total_links")
 
-                container.appendChild(div)
-            })
-            
-            setInterval(() => {
-                let all_items = document.querySelectorAll(".link_item")
-                link_data.forEach((item, index) => {
-                if (all_items[index]) {
-                    all_items[index].querySelector(".time_text").textContent = 
-                    "Found " + get_time_ago(item.timestamp)
-                }
+            function update_header() {
+                let now = Math.floor(Date.now() / 1000)
+                let past_hour = link_data.filter(item => now - item.timestamp <= 3600).length
+                header.textContent =
+                    "Total Links: " + link_data.length + " · Past Hour: " + past_hour
+            }
+
+            update_header()
+
+
+                link_data.sort((a, b) => b.timestamp - a.timestamp)
+
+                link_data.forEach(item => {
+                    let div = document.createElement("div")
+                    div.className = "link_item"
+
+                    let code_match = item.url.match(/code=([a-f0-9]{32})|privateServerLinkCode=(\d+)/i)
+                    let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
+
+                    div.innerHTML = `
+                        <a href="${item.url}" target="_blank">Private Server ${display_code}</a>
+                        <span class="time_text">Found ${get_time_ago(item.timestamp)}</span>
+                    `
+                    container.appendChild(div)
                 })
-            }, 60000)
+
+                setInterval(() => {
+                    let all_items = document.querySelectorAll(".link_item")
+                    link_data.forEach((item, index) => {
+                        if (all_items[index]) {
+                            all_items[index].querySelector(".time_text").textContent =
+                                "Found " + get_time_ago(item.timestamp)
+                        }
+                    })
+                    update_header()
+                }, 60000)
             })
-            .catch(error => {
-            document.getElementById("link_list").innerHTML = 
-                '<p style="color: #ff6b6b">Error loading links</p>'
+            .catch(() => {
+                document.getElementById("link_list").innerHTML =
+                    '<p style="color: #ff6b6b">Error loading links</p>'
             })
     </script>
 </body>
