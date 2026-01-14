@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>links</title>
+<style>
+  body { font-family: Arial; background: #121212; color: #eee; padding: 2rem; }
+  a { color: #4ea1ff; text-decoration: none; }
+  .link_item { margin-bottom: 1rem; }
+  .user_id { font-weight: bold; margin-right: 0.5rem; }
+</style>
+</head>
+<body>
+<h1>vip links</h1>
+<div id="link_list"></div>
+<script>
+fetch('links.json')
+  .then(response => response.json())
+  .then(link_data => {
+    const container = document.getElementById('link_list');
+    link_data.forEach(link_item => {
+      const div = document.createElement('div');
+      div.className = 'link_item';
+      div.innerHTML = `<span class="user_id">${link_item.id}</span><a href="${link_item.url}" target="_blank">${link_item.url}</a>`;
+      container.appendChild(div);
+    });
+  });
+</script>
+</body>
+</html>
