@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>links</title>
+    <title>LT2 Private Servers</title>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -12,10 +12,13 @@
             background: #121212;
             color: #eee;
             padding: 2rem;
-            max-width: 800px;
+            min-width: 500px;  
+            max-width: 80%; 
             margin: 0 auto;
+            text-align: center;
         }
         a {
+            font-size: 1.2rem;
             color: #4ea1ff;
             text-decoration: none;
         }
@@ -29,13 +32,15 @@
             background: #1e1e1e;
             border-radius: 8px;
         }
-        .time_text {
+        .item_details {
             color: #aaa;
-            font-size: .9rem;
+            font-size: 1rem;
             margin-top: .3rem;
             display: block;
+            text-align: center;
         }
         .header_text {
+            font-size: 1.3rem;
             margin-bottom: 1.5rem;
             color: #ccc;
             text-align: center;
@@ -45,14 +50,16 @@
             bottom: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 0.9rem;
+            font-size: clamp(0.8rem, 2vw, 1rem); 
             color: #eee;
             text-align: center;
-            padding: 0.4rem 0.8rem;
+            padding: clamp(0.2rem, 0.8vw, 0.4rem) clamp(0.4rem, 1.5vw, 0.8rem); 
             z-index: 1000;
             background: rgba(39, 39, 39, 0.4); 
-            border-radius: 6px; 
-            display: inline-block; 
+            border-radius: clamp(4px, 1vw, 8px); 
+            display: inline-block;
+            min-width: min-content; 
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -91,7 +98,7 @@
             return years + " year" + (years > 1 ? "s" : "") + " ago"
         }
 
-        fetch("links.json?t=" + new Date().getTime())
+        fetch("links.json")
             .then(response => response.json())
             .then(link_data => {
                 let container = document.getElementById("link_list")
@@ -115,10 +122,10 @@
 
                     let code_match = item.url.match(/code=([a-f0-9]{32})|privateServerLinkCode=(\d+)/i)
                     let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
-
+                    let seen_count = item.seen || 1
                     div.innerHTML = `
-                        <a href="${item.url}" target="_blank">Private Server ${display_code}</a>
-                        <span class="time_text">Found ${get_time_ago(item.timestamp)}</span>
+                        <a href="${item.url}" target="_blank"><span class="code_display">${display_code}</span></a>
+                        <span class="item_details">Found ${get_time_ago(item.timestamp)} · Seen ${seen_count} ${seen_count > 2 ? "times" : "time"}</span> 
                     `
                     container.appendChild(div)
                 })
@@ -127,17 +134,16 @@
                     let all_items = document.querySelectorAll(".link_item")
                     link_data.forEach((item, index) => {
                         if (all_items[index]) {
-                            all_items[index].querySelector(".time_text").textContent =
-                                "Found " + get_time_ago(item.timestamp)
+                            all_items[index].querySelector(".item_details").textContent = `Found ${get_time_ago(item.timestamp)} · Seen ${seen_count} ${seen_count > 2 ? "times" : "time"}`
                         }
                     })
                     update_header()
                 }, 60000)
             })
             .catch(() => {
-                document.getElementById("link_list").innerHTML =
-                    '<p style="color: #ff6b6b">Error loading links</p>'
+                document.getElementById("link_list").innerHTML = '<p style="color: #ff6b6b">Error loading links</p>'
             })
     </script>
 </body>
 </html>
+
