@@ -105,7 +105,7 @@
             return years + " year" + (years > 1 ? "s" : "") + " ago"
         }
 
-        fetch("links.json")
+        fetch("https://gist.githubusercontent.com/not-python/740ff0bd751febc3ad1bf8399f411435/raw/links.json")
             .then(response => response.json())
             .then(link_data => {
                 let container = document.getElementById("link_list")
