@@ -13,4 +13,4 @@ Private server links are automatically found and uploaded here every 30 minutes.
 <sub>i know the image is horrific pls send better ones</sub>
 ## 📃 License
 - **Code** (HTML, CSS, JavaScript) is licensed under the **MIT License**, for more info see [LICENSE](LICENSE).
-- **Data** ([links.json](links.json)) is licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**, for more info see [DATA_LICENSE](DATA_LICENSE)
+- **Data** ([links.json](https://gist.github.com/not-python/740ff0bd751febc3ad1bf8399f411435)) is licensed under **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**, for more info see [DATA_LICENSE](DATA_LICENSE)
