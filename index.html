@@ -25,13 +25,15 @@
             text-align: center;
         }
         a {
-            font-size: 1.2rem;
             color: #4ea1ff;
             text-decoration: none;
         }
         a:hover {
             color: #7fbaff;
             text-decoration: underline;
+        }
+        .code_display {
+            font-size: 1.2rem;
         }
         .link_item {
             margin-bottom: 1.2rem;
@@ -52,32 +54,49 @@
             color: #ccc;
             text-align: center;
         }
-        .footer_text {
-            position: fixed;
-            bottom: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: clamp(0.8rem, 2vw, 1rem); 
-            color: #eee;
-            text-align: center;
-            padding: clamp(0.2rem, 0.8vw, 0.4rem) clamp(0.4rem, 1.5vw, 0.8rem); 
-            z-index: 1000;
-            background: rgba(39, 39, 39, 0.4); 
-            border-radius: clamp(4px, 1vw, 8px); 
-            display: inline-block;
-            min-width: min-content; 
-            white-space: nowrap;
+        .info_box {
+            background: #1a1a1a;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        .info_title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .info_description {
+            color: #ccc;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .info_credits {
+            color: #aaa;
+            font-size: 1rem;
         }
     </style>
 </head>
 <body>
-    <div class="header_text" id="total_links">Total Links: 0 · Past Hour: 0</div>
-    <div id="link_list"></div>
-
-    <div class="footer_text">
-        Created and maintained by @not_py ·
-        <a href="https://github.com/not-python/LT2-VIPs" target="_blank">View main page</a>
+    <div class="info_box">
+        <div class="info_title">How to Use</div>
+        <div class="info_description">
+            Click any hyperlink below to join that private server. Links update automatically every few minutes. If one is invalid try another or wait for new ones to be published. <br>
+            Please contact my discord below with any questions or requests. Feel free to ⭐ at the main page below if you found this helpful.
+        </div>
+        <div class="info_credits">
+            Created and maintained by <a href="https://github.com/not-python" target="_blank">@not_py</a> · 
+            <a href="https://github.com/not-python/LT2-VIPs" target="_blank">View main page</a>
+        </div>
     </div>
+    <div class="info_box">
+        <div class="info_title">Statistics</div>
+        <div class="info_description" id="total_links">
+            Loading
+        </div>
+    </div>
+    <div id="link_list"></div>
 
     <script>
         function get_time_ago(timestamp) {
@@ -87,22 +106,22 @@
             if (seconds_diff < 60) return 'just now'
             if (seconds_diff < 3600) {
                 let minutes = Math.floor(seconds_diff / 60)
-                return minutes + " minute" + (minutes > 1 ? "s" : "") + " ago"
+                return "<b>" + minutes + "</b> minute" + (minutes > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 86400) {
                 let hours = Math.floor(seconds_diff / 3600)
-                return hours + " hour" + (hours > 1 ? "s" : "") + " ago"
+                return "<b>" + hours + "</b> hour" + (hours > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 2592000) {
                 let days = Math.floor(seconds_diff / 86400)
-                return days + " day" + (days > 1 ? "s" : "") + " ago"
+                return "<b>" + days + "</b> day" + (days > 1 ? "s" : "") + " ago"
             }
             if (seconds_diff < 31536000) {
                 let months = Math.floor(seconds_diff / 2592000)
-                return months + " month" + (months > 1 ? "s" : "") + " ago"
+                return "<b>" + months + "</b> month" + (months > 1 ? "s" : "") + " ago"
             }
             let years = Math.floor(seconds_diff / 31536000)
-            return years + " year" + (years > 1 ? "s" : "") + " ago"
+            return "<b>" + years + "</b> year" + (years > 1 ? "s" : "") + " ago"
         }
 
         fetch("https://gist.githubusercontent.com/not-python/740ff0bd751febc3ad1bf8399f411435/raw/links.json")
@@ -113,11 +132,10 @@
 
             function update_header() {
                 let now = Math.floor(Date.now() / 1000)
-                let past_hour = link_data.filter(item => now - item.timestamp <= 3600).length
-                header.textContent =
-                    "Total Links: " + link_data.length + " · Past Hour: " + past_hour
+                let past_3_hour = link_data.filter(item => now - item.timestamp <= 10800).length
+                header.innerHTML =
+                    "There are <b>" + link_data.length + "</b> links in the database, <b>" + past_3_hour + "</b> were added in the past three hours.<br>More information coming soon."
             }
-
             update_header()
 
 
@@ -131,8 +149,8 @@
                     let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
                     let seen_count = item.seen || 1
                     div.innerHTML = `
-                        <a href="${item.url}" target="_blank"><span class="code_display">${display_code}</span></a>
-                        <span class="item_details">Found ${get_time_ago(item.timestamp)} · Seen ${seen_count} ${seen_count > 2 ? "times" : "time"}</span> 
+                        <a href="${item.url}" target="_blank"><span class="code_display">Server ${display_code}</span></a>
+                        <span class="item_details">Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"}</span> 
                     `
                     container.appendChild(div)
                 })
