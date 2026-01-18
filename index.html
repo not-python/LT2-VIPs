@@ -129,18 +129,18 @@
             .then(link_data => {
                 let container = document.getElementById("link_list")
                 let header = document.getElementById("total_links")
-        
+                
             function update_header() {
                 let now = Math.floor(Date.now() / 1000)
                 let past_3_hour = link_data.filter(item => now - item.timestamp <= 10800).length
                 header.innerHTML =
                     "We have found a total of <b>" + link_data.length + "</b> links, <b>" + past_3_hour + "</b> were added in the past three hours.<br>More information coming soon."
             }
-            update_header()
             link_data.sort((a, b) => b.timestamp - a.timestamp)
             let now = Math.floor(Date.now() / 1000)
-            link_data = link_data.filter(item => now - item.timestamp <= 86400)
-            link_data.forEach(item => {
+            link_data_24 = link_data.filter(item => now - item.timestamp <= 86400)
+            update_header()
+            link_data_24.forEach(item => {
                 let div = document.createElement("div")
                 div.className = "link_item"
         
@@ -156,7 +156,7 @@
         
             setInterval(() => {
                 let all_items = document.querySelectorAll(".link_item")
-                link_data.forEach((item, index) => {
+                link_data_24.forEach((item, index) => {
                     if (all_items[index]) {
                         let seen_count = item.seen || 1
                         all_items[index].querySelector(".item_details").innerHTML = `Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"}`
