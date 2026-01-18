@@ -4,10 +4,10 @@ This is a constantly updating list of free Lumber Tycoon 2 VIP servers sourced f
 ## 🔗 Website
 You can check out the latest servers here: [https://not-python.github.io/LT2-VIPs/](https://not-python.github.io/LT2-VIPs/)
 
-If none are currently valid, there will be more in less than 30 minutes.
+If none are currently valid, there will be more in less than 10 minutes.
 
 ## 🔨 How It Works
-Private server links are automatically found and uploaded here every 30 minutes. This runs on a Raspberry Pi 4B, 24/7 to bring you fresh private servers.
+Private server links are automatically found and uploaded here every 5 minutes minimum. This runs on a Raspberry Pi 4B, 24/7 to bring you fresh private servers.
 
 ![Thumb](embed.png)
 <sub>i know the image is horrific pls send better ones</sub>
