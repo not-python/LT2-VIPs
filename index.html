@@ -147,9 +147,10 @@
                 let code_match = item.url.match(/code=([a-f0-9]{32})|privateServerLinkCode=(\d+)/i)
                 let display_code = code_match ? (code_match[1] || code_match[2]) : "0"
                 let seen_count = item.seen || 1
+                let source = item.source || "Coming Soon"
                 div.innerHTML = `
                     <a href="${item.url}" target="_blank"><span class="code_display">Server ${display_code}</span></a>
-                    <span class="item_details">Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"}</span> 
+                    <span class="item_details">Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"} · From <b>${source}</b></span> 
                 `
                 container.appendChild(div)
             })
@@ -159,7 +160,8 @@
                 link_data_24.forEach((item, index) => {
                     if (all_items[index]) {
                         let seen_count = item.seen || 1
-                        all_items[index].querySelector(".item_details").innerHTML = `Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"}`
+                        let source = item.source || "Coming Soon"
+                        all_items[index].querySelector(".item_details").innerHTML = `Found ${get_time_ago(item.timestamp)} · Seen <b>${seen_count}</b> ${seen_count > 1 ? "times" : "time"} · From <b>${source}</b>`
                     }
                 })
                 update_header()
